@@ -1,6 +1,6 @@
 import os
 import urllib.parse
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 import json
 import requests
 from dotenv import load_dotenv
@@ -76,7 +76,7 @@ def save_last_notified():
     dir = os.path.dirname(__file__)
     log_file_path = os.path.join(dir, 'last_notified.log')
     with open(log_file_path, mode='w') as f:
-        now = datetime.now(tz=timezone(offset=timedelta(hours=9)))
+        now = datetime.now()
         f.write(now.strftime(DATETIME_FORMAT))
 
 if __name__ == '__main__':
