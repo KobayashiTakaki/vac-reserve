@@ -27,7 +27,7 @@ def create_line_message(text):
     }
     requests.post(url, data=json.dumps(data), headers=headers)
 
-def fetch_time_slots():
+def fetch_available_time_slot():
     base_url = 'https://api-cache.vaccines.sciseed.jp/'
     url = urllib.parse.urljoin(base_url, 'public/{}/reservation_frame'.format(ORGANIZATION_ID))
     payload = {
@@ -36,7 +36,8 @@ def fetch_time_slots():
         'start_date_before': date(2021, 8, 31).strftime('%Y-%m-%d')
     }
     res = requests.get(url, params=payload)
-    return res.json()['reservation_frame']
+    time_slots = res.json()['reservation_frame']
+    return [t for t in time_slots if is_time_slot_available(t)]
 
 def is_time_slot_available(t):
     if t['is_published'] and t['reservation_cnt'] < t['reservation_cnt_limit']:
@@ -81,8 +82,7 @@ def save_last_notified():
 if __name__ == '__main__':
     if did_notified_recently():
         exit()
-    time_slots = fetch_time_slots()
-    available_time_slot = [t for t in time_slots if is_time_slot_available(t)]
+    available_time_slot = fetch_available_time_slot()
     if len(available_time_slot) == 0:
         print('No time slot avaliable.')
         exit()
