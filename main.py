@@ -1,6 +1,6 @@
 import os
 import urllib.parse
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 import json
 import requests
 from dotenv import load_dotenv
@@ -10,6 +10,7 @@ LINE_ACCESS_TOKEN = os.getenv('LINE_ACCESS_TOKEN')
 ORGANIZATION_ID = os.getenv('ORGANIZATION_ID')
 LOGIN_URL= os.getenv('LOGIN_URL')
 DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+TIMEZONE = timezone(offset=timedelta(hours=9))
 
 def create_line_message(text):
     url = 'https://api.line.me/v2/bot/message/broadcast'
@@ -30,10 +31,12 @@ def create_line_message(text):
 def fetch_available_time_slot():
     base_url = 'https://api-cache.vaccines.sciseed.jp/'
     url = urllib.parse.urljoin(base_url, 'public/{}/reservation_frame'.format(ORGANIZATION_ID))
+    now = datetime.now(tz=TIMEZONE)
+    date_to = now + timedelta(days=30)
     payload = {
         'item_id': '3',
-        'start_date_after': date(2021, 8, 1).strftime('%Y-%m-%d'),
-        'start_date_before': date(2021, 8, 31).strftime('%Y-%m-%d')
+        'start_date_after': date(now.year, now.month, now.day).strftime('%Y-%m-%d'),
+        'start_date_before': date(date_to.year, date_to.month, date_to.day).strftime('%Y-%m-%d')
     }
     res = requests.get(url, params=payload)
     time_slots = res.json()['reservation_frame']
