@@ -63,7 +63,7 @@ def display_format_time_slot(t):
     ret += '(2回目予定: {} {}-{})'.format(next_d, next_start_time, next_end_time)
     return ret
 
-def did_notified_recently():
+def did_notify_recently():
     dir = os.path.dirname(__file__)
     log_file_path = os.path.join(dir, 'last_notified.log')
     if not os.path.isfile(log_file_path):
@@ -85,7 +85,7 @@ def save_last_notified():
         f.write(now.strftime(DATETIME_FORMAT))
 
 if __name__ == '__main__':
-    if did_notified_recently():
+    if did_notify_recently():
         exit()
     available_time_slot = fetch_available_time_slot()
     if len(available_time_slot) == 0:
