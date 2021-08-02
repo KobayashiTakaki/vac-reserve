@@ -43,7 +43,9 @@ def fetch_available_time_slot():
     return [t for t in time_slots if is_time_slot_available(t)]
 
 def is_time_slot_available(t):
-    if t['is_published'] and t['reservation_cnt'] < t['reservation_cnt_limit']:
+    now = datetime.now(tz=TIMEZONE)
+    t_time = datetime.strptime(t['start_at'], '%Y-%m-%dT%H:%M:%S%z')
+    if t['is_published'] and t['reservation_cnt'] < t['reservation_cnt_limit'] and now < t_time:
         return True
     else:
         return False
