@@ -59,7 +59,7 @@ def display_format_time_slot(t):
     next_end_time = t['next']['end_at'][11:16]
     ret = '\n------\n'
     ret += '日時: {} {}-{}\n'.format(d, start_time, end_time)
-    ret += '会場: {}\n'.format(t['name'])
+    ret += '名称: {}\n'.format(t['name'])
     ret += '空き: {}件 (最大: {}件)\n'.format((t['reservation_cnt_limit'] - t['reservation_cnt']), t['reservation_cnt_limit'])
     ret += '(2回目予定: {} {}-{})'.format(next_d, next_start_time, next_end_time)
     return ret
