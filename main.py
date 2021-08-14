@@ -55,13 +55,17 @@ def display_format_time_slot(t):
     d = t['start_at'][:10].replace('-', '/')
     start_time = t['start_at'][11:16]
     end_time = t['end_at'][11:16]
-    next_d = t['next']['start_at'][:10].replace('-', '/')
-    next_start_time = t['next']['start_at'][11:16]
-    next_end_time = t['next']['end_at'][11:16]
     ret = '\n------\n'
     ret += '日時: {} {}-{}\n'.format(d, start_time, end_time)
     ret += '名称: {}\n'.format(t['name'])
-    ret += '空き: {}件 (最大: {}件)\n'.format((t['reservation_cnt_limit'] - t['reservation_cnt']), t['reservation_cnt_limit'])
+    ret += '空き: {}件 (最大: {}件)'.format((t['reservation_cnt_limit'] - t['reservation_cnt']), t['reservation_cnt_limit'])
+    next = t['next']
+    if not next:
+        return ret
+    ret += '\n'
+    next_d = next['start_at'][:10].replace('-', '/')
+    next_start_time = next['start_at'][11:16]
+    next_end_time = next['end_at'][11:16]
     ret += '(2回目予定: {} {}-{})'.format(next_d, next_start_time, next_end_time)
     return ret
 
