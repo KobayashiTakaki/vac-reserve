@@ -32,10 +32,11 @@ def fetch_available_time_slot():
     base_url = 'https://api-cache.vaccines.sciseed.jp/'
     url = urllib.parse.urljoin(base_url, 'public/{}/reservation_frame'.format(ORGANIZATION_ID))
     now = datetime.now(tz=TIMEZONE)
+    date_from = now + timedelta(days=1)
     date_to = now + timedelta(days=30)
     payload = {
         'item_id': '3',
-        'start_date_after': date(now.year, now.month, now.day).strftime('%Y-%m-%d'),
+        'start_date_after': date(date_from.year, date_from.month, date_from.day).strftime('%Y-%m-%d'),
         'start_date_before': date(date_to.year, date_to.month, date_to.day).strftime('%Y-%m-%d')
     }
     res = requests.get(url, params=payload)
